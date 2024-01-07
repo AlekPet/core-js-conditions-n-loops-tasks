@@ -121,8 +121,26 @@ function isIsoscelesTriangle(a, b, c) {
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
-  throw new Error('Not implemented');
+function convertToRomanNumerals(num) {
+  const numRoman = [
+    ['X', 10],
+    ['IX', 9],
+    ['V', 5],
+    ['IV', 4],
+    ['I', 1],
+  ];
+
+  let result = '';
+  let copyNum = num;
+
+  for (let i = 0; i < numRoman.length; i += 1) {
+    const [key, value] = numRoman[i];
+    while (copyNum >= value) {
+      result += key;
+      copyNum -= value;
+    }
+  }
+  return result;
 }
 
 /**
@@ -273,27 +291,22 @@ function isContainNumber(num, digit) {
  *  [1, 2, 3, 4, 5] => -1   => no balance element
  */
 function getBalanceIndex(arr) {
-  if (arr.length < 3) return -1;
-  let bIndex = 2;
-  let res1 = 0;
-  let res2 = 0;
+  let leftSide = 0;
+  let rightSide = 0;
 
-  function findBalanceIndex() {
-    for (let i = 0; i < bIndex; i += 1) res1 += arr[i];
-    for (let i = bIndex + 1; i < arr.length; i += 1) res2 += arr[i];
-
-    if (res1 === res2) return bIndex;
-
-    if (bIndex <= arr.length) {
-      res1 = 0;
-      res2 = 0;
-      bIndex += 1;
-      return findBalanceIndex();
-    }
-    return -1;
+  for (let i = 0; i < arr.length; i += 1) {
+    rightSide += arr[i];
   }
 
-  return findBalanceIndex();
+  for (let i = 0; i < arr.length; i += 1) {
+    rightSide -= arr[i];
+
+    if (leftSide === rightSide) return i;
+
+    leftSide += arr[i];
+  }
+
+  return -1;
 }
 
 /**
