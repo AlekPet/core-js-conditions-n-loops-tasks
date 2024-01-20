@@ -330,8 +330,46 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const arr = [];
+
+  for (let i = 0; i < size; i += 1) {
+    arr[i] = [];
+  }
+
+  let row = 0;
+  let col = 0;
+  let endRow = size - 1;
+  let endCol = size - 1;
+  let count = 1;
+
+  while (row <= endRow && col <= endCol) {
+    for (let i = col; i <= endCol; i += 1) {
+      arr[row][i] = count;
+      count += 1;
+    }
+    row += 1;
+
+    for (let i = row; i <= endRow; i += 1) {
+      arr[i][endCol] = count;
+      count += 1;
+    }
+    endCol -= 1;
+
+    for (let i = endCol; i >= col; i -= 1) {
+      arr[endRow][i] = count;
+      count += 1;
+    }
+    endRow -= 1;
+
+    for (let i = endRow; i >= row; i -= 1) {
+      arr[i][col] = count;
+      count += 1;
+    }
+
+    col += 1;
+  }
+  return arr;
 }
 
 /**
@@ -388,8 +426,29 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
+function shuffleChar(str, iterations) {
+  let result = str.split('');
+  let strCopy = str.split('');
+  for (let j = 0; j < iterations; j += 1) {
+    const tmp = strCopy;
+    strCopy = result;
+    result = tmp;
+
+    let iOdd = 0;
+    let iEven = str.length / 2;
+
+    for (let i = 1; i < str.length; i += 2) {
+      if (i % 2 !== 0) {
+        result[iEven] = strCopy[i];
+        iEven += 1;
+        result[iOdd] = strCopy[i - 1];
+        iOdd += 1;
+      }
+    }
+  }
+  result += '';
+
+  return result.replaceAll(',', '');
 }
 
 /**
