@@ -387,8 +387,19 @@ function getSpiralMatrix(size) {
  *    [7, 8, 9]         [9, 6, 3]
  *  ]                 ]
  */
-function rotateMatrix(/* matrix */) {
-  throw new Error('Not implemented');
+function rotateMatrix(matrix) {
+  const mat = matrix;
+  const z = mat.length - 1;
+  for (let i = 0; i < Math.floor(mat.length / 2); i += 1) {
+    for (let j = i; j < z - i; j += 1) {
+      const curr = mat[i][j];
+      mat[i][j] = mat[z - j][i];
+      mat[z - j][i] = mat[z - i][z - j];
+      mat[z - i][z - j] = mat[j][z - i];
+      mat[j][z - i] = curr;
+    }
+  }
+  return mat;
 }
 
 /**
@@ -405,8 +416,55 @@ function rotateMatrix(/* matrix */) {
  *  [2, 9, 5, 9]    => [2, 5, 9, 9]
  *  [-2, 9, 5, -3]  => [-3, -2, 5, 9]
  */
-function sortByAsc(/* arr */) {
-  throw new Error('Not implemented');
+function sortByAsc(arr) {
+  function merge(arrm, tempArray1, left, mid, right) {
+    let i = left;
+    let j = mid + 1;
+    let k = left;
+    const arrr = arrm;
+    const tempArray = tempArray1;
+
+    while (i <= mid && j <= right) {
+      if (arrr[i] <= arrr[j]) {
+        tempArray[k] = arrr[i];
+        i += 1;
+      } else {
+        tempArray[k] = arrr[j];
+        j += 1;
+      }
+      k += 1;
+    }
+
+    while (i <= mid) {
+      tempArray[k] = arr[i];
+      i += 1;
+      k += 1;
+    }
+
+    while (j <= right) {
+      tempArray[k] = arr[j];
+      j += 1;
+      k += 1;
+    }
+
+    for (let p = left; p <= right; p += 1) {
+      arrr[p] = tempArray[p];
+    }
+  }
+
+  const n = arr.length;
+  const tempArray = new Array(n);
+
+  for (let currentSize = 1; currentSize < n; currentSize *= 2) {
+    for (let leftStart = 0; leftStart < n - 1; leftStart += 2 * currentSize) {
+      const mid = Math.min(leftStart + currentSize - 1, n - 1);
+      const rightEnd = Math.min(leftStart + 2 * currentSize - 1, n - 1);
+
+      merge(arr, tempArray, leftStart, mid, rightEnd);
+    }
+  }
+
+  return arr;
 }
 
 /**
@@ -468,8 +526,29 @@ function shuffleChar(str, iterations) {
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(number) {
+  const nums = Array.from(`${number}`, (v) => +v);
+
+  let i = nums.length - 2;
+  let j = nums.length - 1;
+
+  while (i >= 0 && nums[i] >= nums[i + 1]) {
+    i -= 1;
+  }
+
+  if (i === -1) return number;
+
+  while (nums[j] <= nums[i]) {
+    j -= 1;
+  }
+
+  const tempnumI = nums[i];
+  nums[i] = nums[j];
+  nums[j] = tempnumI;
+
+  const right = nums.splice(i + 1);
+  right.sort((a, b) => a - b);
+  return +[...nums, ...right].join('');
 }
 
 module.exports = {
